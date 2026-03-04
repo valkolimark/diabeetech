@@ -74,6 +74,12 @@ export default function GlucoseGraph() {
     return ['dataMin', 'dataMax']
   }, [zoomDomain])
 
+  // Filter data to visible range when zoomed (prevents dots rendering outside chart area)
+  const visibleData = useMemo(() => {
+    if (!zoomDomain) return chartData
+    return chartData.filter((d) => d.time >= zoomDomain.start && d.time <= zoomDomain.end)
+  }, [chartData, zoomDomain])
+
   const isZoomed = zoomDomain !== null
 
   // Generate tick positions at hour boundaries (adaptive intervals when zoomed in)
@@ -286,7 +292,7 @@ export default function GlucoseGraph() {
       <circle
         cx={cx}
         cy={cy}
-        r={5}
+        r={3}
         fill={payload.color}
         style={{ filter: `drop-shadow(0 0 3px ${payload.color})` }}
       />
@@ -332,6 +338,7 @@ export default function GlucoseGraph() {
                 dataKey="time"
                 type="number"
                 domain={xDomain}
+                allowDataOverflow={true}
                 ticks={hourTicks}
                 tickFormatter={formatTime}
                 stroke="transparent"
@@ -368,7 +375,7 @@ export default function GlucoseGraph() {
               <Tooltip content={<CustomTooltip />} cursor={false} />
 
               <Scatter
-                data={chartData}
+                data={visibleData}
                 shape={<CustomDot />}
                 isAnimationActive={false}
               />

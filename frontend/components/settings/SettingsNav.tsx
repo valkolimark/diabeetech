@@ -17,8 +17,6 @@ const NAV_ITEMS: { key: SettingsCategory; label: string }[] = [
   { key: 'voice', label: 'Voice' },
   { key: 'theme', label: 'Theme' },
   { key: 'timezone', label: 'Timezone' },
-  { key: 'speaker', label: 'Speaker' },
-  { key: 'about', label: 'About' },
 ]
 
 export default function SettingsNav({ active, onChange }: SettingsNavProps) {

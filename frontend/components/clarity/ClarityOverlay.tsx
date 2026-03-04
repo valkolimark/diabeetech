@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface ClarityData {
   period_days: number
@@ -19,7 +19,7 @@ interface ClarityOverlayProps {
   onClose: () => void
 }
 
-const PERIODS = [3, 7, 14, 30]
+const PERIODS = [3, 7]
 
 function gmiColor(gmi: number): string {
   if (gmi < 7) return '#34C759'
@@ -31,6 +31,7 @@ export default function ClarityOverlay({ onClose }: ClarityOverlayProps) {
   const [period, setPeriod] = useState(7)
   const [data, setData] = useState<ClarityData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showNotice, setShowNotice] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -59,12 +60,46 @@ export default function ClarityOverlay({ onClose }: ClarityOverlayProps) {
           Back
         </button>
         <span className="flex-1 text-center text-sm font-body uppercase text-white/50" style={{ letterSpacing: 3 }}>
-          Clarity
+          Hive Insights
         </span>
         <div style={{ width: 60 }} />
       </div>
 
       <div className="flex-1 overflow-y-auto p-6">
+        {/* Standard thresholds notice — collapsed by default */}
+        <div className="flex justify-center mb-4">
+          <button
+            onClick={() => setShowNotice((v) => !v)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors"
+            style={{ background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)' }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(59,130,246,0.7)" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <span className="text-[11px] font-body text-blue-400/70">Standard thresholds</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(59,130,246,0.5)" strokeWidth="2"
+              style={{ transform: showNotice ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+        </div>
+        <AnimatePresence>
+          {showNotice && (
+            <motion.div
+              className="flex justify-center mb-4"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="px-4 py-2 rounded-lg mx-auto max-w-md text-[11px] font-body text-blue-400/70 text-center"
+                style={{ background: 'rgba(59,130,246,0.08)' }}>
+                Calculated using standard clinical thresholds (In Range: 70–180 mg/dL, Low: &lt;70, Very Low: &lt;54, High: &gt;180, Very High: &gt;250), not your custom settings.
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Period selector */}
         <div className="flex justify-center gap-2 mb-6">
           {PERIODS.map((p) => (

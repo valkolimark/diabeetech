@@ -11,6 +11,8 @@ import SettingsOverlay from '@/components/settings/SettingsOverlay'
 import ClarityOverlay from '@/components/clarity/ClarityOverlay'
 import ShutdownDialog from '@/components/ShutdownDialog'
 import LoginScreen from '@/components/LoginScreen'
+import WiFiConnectScreen from '@/components/WiFiConnectScreen'
+import { useWiFiStatus } from '@/hooks/useWiFiStatus'
 import { getTheme, lightenHex } from '@/lib/themes'
 
 // Glucose state tint overlays — subtle, blended with theme bg
@@ -47,6 +49,7 @@ function blendColors(base: string, tint: { r: number; g: number; b: number }): s
 
 export default function Home() {
   const { settings, connected, reconnecting, alert, glucose, send } = useApp()
+  const { hasInternet, recheckNow } = useWiFiStatus()
   const isBig = settings.display_mode === 'big'
   const [showSettings, setShowSettings] = useState(false)
   const [showClarity, setShowClarity] = useState(false)
@@ -101,44 +104,54 @@ export default function Home() {
   // Show login screen if not authenticated
   if (authChecked && !authenticated) {
     return (
-      <LoginScreen onLogin={() => {
-        setAuthenticated(true)
-        window.location.reload()
-      }} />
+      <>
+        <LoginScreen onLogin={() => {
+          setAuthenticated(true)
+          window.location.reload()
+        }} />
+        <AnimatePresence>
+          {!hasInternet && <WiFiConnectScreen onConnected={recheckNow} />}
+        </AnimatePresence>
+      </>
     )
   }
 
   return (
-    <main
-      className={`w-screen h-screen flex flex-col overflow-hidden ${isPulsing ? 'alert-pulsing' : ''} ${isUrgentLow ? 'urgent-pulsing' : ''}`}
-      style={bgStyle}
-    >
-      <HeaderBar
-        onSettingsClick={() => setShowSettings(true)}
-        onClarityClick={() => setShowClarity(true)}
-        onPowerClick={() => setShowShutdown(true)}
-      />
-      <div className="flex-1 min-h-0">
-        {isBig ? <BigLayout /> : <CompactLayout />}
-      </div>
+    <>
+      <main
+        className={`w-screen h-screen flex flex-col overflow-hidden ${isPulsing ? 'alert-pulsing' : ''} ${isUrgentLow ? 'urgent-pulsing' : ''}`}
+        style={bgStyle}
+      >
+        <HeaderBar
+          onSettingsClick={() => setShowSettings(true)}
+          onClarityClick={() => setShowClarity(true)}
+          onPowerClick={() => setShowShutdown(true)}
+        />
+        <div className="flex-1 min-h-0">
+          {isBig ? <BigLayout /> : <CompactLayout />}
+        </div>
 
+        <AnimatePresence>
+          {showSettings && (
+            <SettingsOverlay onClose={() => setShowSettings(false)} />
+          )}
+          {showClarity && (
+            <ClarityOverlay onClose={() => setShowClarity(false)} />
+          )}
+          {showShutdown && (
+            <ShutdownDialog
+              onCancel={() => setShowShutdown(false)}
+              onConfirm={() => {
+                send({ type: 'system', action: 'shutdown' })
+                setShowShutdown(false)
+              }}
+            />
+          )}
+        </AnimatePresence>
+      </main>
       <AnimatePresence>
-        {showSettings && (
-          <SettingsOverlay onClose={() => setShowSettings(false)} />
-        )}
-        {showClarity && (
-          <ClarityOverlay onClose={() => setShowClarity(false)} />
-        )}
-        {showShutdown && (
-          <ShutdownDialog
-            onCancel={() => setShowShutdown(false)}
-            onConfirm={() => {
-              send({ type: 'system', action: 'shutdown' })
-              setShowShutdown(false)
-            }}
-          />
-        )}
+        {!hasInternet && <WiFiConnectScreen onConnected={recheckNow} />}
       </AnimatePresence>
-    </main>
+    </>
   )
 }

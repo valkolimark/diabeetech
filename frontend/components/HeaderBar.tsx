@@ -51,13 +51,13 @@ export default function HeaderBar({ onSettingsClick, onClarityClick, onPowerClic
           </svg>
         </button>
 
-        {/* Clarity */}
+        {/* Hive Insights */}
         <button
           onClick={onClarityClick}
           className="px-3 py-1.5 rounded-lg text-xs font-body text-white/50 hover:text-white/80 hover:bg-white/5 transition-colors"
-          title="Clarity Analytics"
+          title="Hive Insights"
         >
-          Clarity
+          Insights
         </button>
 
         {/* Settings gear */}

@@ -201,12 +201,12 @@ async def get_clarity(period: int):
     from services.clarity import get_clarity_stats
     if period not in (3, 7, 14, 30):
         period = 7
-    settings = _read_json("settings.json")
+    # Use Dexcom standard clinical thresholds (not user custom thresholds)
     thresholds = {
-        "threshold_high": settings.get("threshold_high", 300),
-        "threshold_trending_high": settings.get("threshold_trending_high", 263),
-        "threshold_trending_low": settings.get("threshold_trending_low", 120),
-        "threshold_low": settings.get("threshold_low", 100),
+        "threshold_high": 180,
+        "threshold_trending_high": 180,
+        "threshold_trending_low": 70,
+        "threshold_low": 70,
     }
     return get_clarity_stats(period, thresholds)
 
@@ -253,3 +253,33 @@ async def get_system_info():
         "subdomain": subdomain,
         "python_version": platform.python_version(),
     }
+
+
+# --- WiFi Management ---
+
+@router.get("/wifi/status")
+async def wifi_status():
+    """Check WiFi connection and internet status."""
+    from services.wifi import WiFiService
+    svc = WiFiService()
+    return await svc.get_status()
+
+
+@router.get("/wifi/scan")
+async def wifi_scan():
+    """Scan for available WiFi networks."""
+    from services.wifi import WiFiService
+    svc = WiFiService()
+    return await svc.scan_networks()
+
+
+@router.post("/wifi/connect")
+async def wifi_connect(body: dict):
+    """Connect to a WiFi network."""
+    from services.wifi import WiFiService
+    ssid = body.get("ssid", "")
+    password = body.get("password", "")
+    if not ssid:
+        return {"success": False, "error": "SSID is required"}
+    svc = WiFiService()
+    return await svc.connect(ssid, password)

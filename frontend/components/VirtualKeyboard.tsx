@@ -184,7 +184,7 @@ function KeyboardPanel({ numeric, onKeyPress, onClose }: KeyboardPanelProps) {
 
   return (
     <motion.div
-      className="fixed bottom-0 left-0 right-0 z-[60] flex flex-col"
+      className="fixed bottom-0 left-0 right-0 z-[80] flex flex-col"
       style={{
         background: 'rgba(20, 20, 25, 0.98)',
         backdropFilter: 'blur(20px)',

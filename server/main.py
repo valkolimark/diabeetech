@@ -256,6 +256,10 @@ if DEV_MODE:
 
     @dev_router.post("/glucose/simulate")
     async def dev_glucose_simulate(body: dict):
+        import time as _time
+        global _sim_active_until
+        # Hold simulation for 60s — prevents real polling from overriding alerts
+        _sim_active_until = _time.time() + 60
         sgv = body.get("sgv", 150)
         trend = body.get("trend", "Flat")
         state = "normal"
@@ -305,6 +309,9 @@ if DEV_MODE:
 
     @dev_router.post("/alert/simulate")
     async def dev_alert_simulate(body: dict):
+        import time as _time
+        global _sim_active_until
+        _sim_active_until = _time.time() + 60
         level = body.get("level", "low")
         # Map level to glucose state and sgv for the alert service
         level_to_state = {
@@ -359,6 +366,15 @@ if DEV_MODE:
         await ws_manager.broadcast("timer_update", app_state["timer_update"])
         return {"ok": True, "timer_id": timer["id"]}
 
+    @dev_router.post("/wifi/simulate")
+    async def dev_wifi_simulate(body: dict):
+        """Toggle simulated WiFi/internet state for development."""
+        from services.wifi import WiFiService
+        svc = WiFiService()
+        has_internet = body.get("has_internet", True)
+        svc.set_dev_state(has_internet)
+        return {"ok": True, "has_internet": has_internet}
+
     app.include_router(dev_router)
     logger.info("DEV_MODE: Simulation endpoints enabled at /dev/*")
 
@@ -371,6 +387,7 @@ timer_service: TimerService = None
 treatments_service: TreatmentsService = None
 auto_announce_service: AutoAnnounceService = None
 _glucose_poll_task: asyncio.Task = None
+_sim_active_until: float = 0  # timestamp when simulation mode expires
 
 
 # --- Startup/Shutdown ---
@@ -403,9 +420,12 @@ async def startup():
         glucose_service = GlucoseService(auth_manager, app_state["settings"])
 
         async def glucose_broadcast(event_type: str, data: dict):
+            import time as _time
             app_state["glucose_update"] = data
             await ws_manager.broadcast(event_type, data)
-            # Check alert conditions on every glucose update
+            # Skip alert check while simulation is active
+            if _sim_active_until > _time.time():
+                return
             if alert_service and data.get("state"):
                 await alert_service.check_alert(data["state"], data.get("sgv"))
 
@@ -503,8 +523,12 @@ async def reinit_services():
         glucose_service = GlucoseService(auth_manager, app_state["settings"])
 
         async def glucose_broadcast(event_type: str, data: dict):
+            import time as _time
             app_state["glucose_update"] = data
             await ws_manager.broadcast(event_type, data)
+            # Skip alert check while simulation is active
+            if _sim_active_until > _time.time():
+                return
             if alert_service and data.get("state"):
                 await alert_service.check_alert(data["state"], data.get("sgv"))
 

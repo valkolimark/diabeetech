@@ -58,7 +58,7 @@ export default function CompactLayout() {
             <motion.div
               className="absolute right-0 top-0 h-full z-20 flex flex-col p-3"
               style={{
-                width: '55%',
+                width: '100%',
                 background: 'rgba(10,10,15,0.95)',
                 borderLeft: '1px solid rgba(255,255,255,0.08)',
                 backdropFilter: 'blur(16px)',

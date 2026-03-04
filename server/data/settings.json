@@ -20,7 +20,7 @@
   "glucose_reading_interval": "5",
   "noise_suppression_enabled": "true",
   "display_mode": "big",
-  "theme": "Theme 2",
+  "theme": "Theme 11",
   "auto_announce_enabled": true,
   "auto_announce_interval": 5
 }
