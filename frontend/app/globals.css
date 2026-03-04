@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'ProximaNovaBlack';
+  src: url('/fonts/ProximaNovaBlack.ttf') format('truetype');
+  font-weight: 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ProximaNovaBlack';
+  src: url('/fonts/ProximaNovaBlack.otf') format('opentype');
+  font-weight: 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PizzaDudePointers';
+  src: url('/fonts/pointersregular.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --db-bg: #0a0a0f;
+  --db-surface: rgba(255, 255, 255, 0.03);
+  --db-border: rgba(255, 255, 255, 0.06);
+  --db-normal: #00FF00;
+  --db-trending-high: #FF8C00;
+  --db-high: #e100ff;
+  --db-trending-low: #FFD700;
+  --db-low: #FF0000;
+  --db-no-data: #404040;
+  --theme-accent: #3b82f6;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #0a0a0f;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+/* Scrollbar hidden globally */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Glucose number glow effect */
+.glucose-glow {
+  text-shadow: 0 0 40px var(--glow-color, rgba(0, 255, 0, 0.4)),
+               0 0 80px var(--glow-color, rgba(0, 255, 0, 0.2));
+}
+
+/* Info pills */
+.info-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Poppins', sans-serif;
+}
+.info-pill .value {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Glass morphism panel */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+}
+
+/* Alert pulse animation — low glucose */
+@keyframes alert-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+.alert-pulsing {
+  animation: alert-pulse 0.5s ease-in-out infinite;
+}
+
+/* Urgent low — faster, more aggressive pulse */
+@keyframes urgent-pulse {
+  0%, 100% {
+    background: linear-gradient(135deg, #2a0000, #4a0000);
+  }
+  50% {
+    background: linear-gradient(135deg, #3d0000, #5a0a0a);
+  }
+}
+
+.urgent-pulsing {
+  animation: urgent-pulse 0.3s ease-in-out infinite !important;
+}

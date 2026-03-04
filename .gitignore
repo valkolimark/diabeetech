@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+frontend/.next/
+frontend/out/
+
+# Server static (built from frontend)
+server/static/
+
+# Next.js trace files
+server/.next/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Data files (user-specific / sensitive)
+server/data/cache/
+server/data/config.json
+server/data/saved_credentials.json
+server/data/contacts.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

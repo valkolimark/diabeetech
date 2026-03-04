@@ -1,0 +1,708 @@
+context:
+  expressions:
+    log_meal:
+      # Basic meal logging with food items
+      - "@optionals I @optionals ate $food:food @optionals for $meal:meal @optionals"
+      - "@optionals I @optionals had $food:food @optionals for $meal:meal @optionals"
+      - "@optionals I @optionals consumed $food:food @optionals for $meal:meal @optionals"
+      - "@optionals for $meal:meal @optionals I @optionals ate $food:food @optionals"
+      - "@optionals for $meal:meal @optionals I @optionals had $food:food @optionals"
+      - "@optionals I'm eating $food:food @optionals"
+      - "@optionals I'm having $food:food @optionals"
+      - "@optionals I ate a $food:food @optionals"
+      - "@optionals I ate an $food:food @optionals"
+      - "@optionals I had a $food:food @optionals"
+      - "@optionals I had an $food:food @optionals"
+      - "@optionals I ate some $food:food @optionals"
+      - "@optionals I had some $food:food @optionals"
+      
+      # Meal logging with carb amounts
+      - "@optionals I @optionals ate $food:food with $pv.TwoDigitInteger:carbs carbs @optionals for $meal:meal @optionals"
+      - "@optionals I @optionals had $food:food with $pv.TwoDigitInteger:carbs carbs @optionals for $meal:meal @optionals"
+      - "@optionals I @optionals ate $pv.TwoDigitInteger:carbs carbs @optionals for $meal:meal @optionals"
+      - "@optionals I @optionals had $pv.TwoDigitInteger:carbs carbs @optionals for $meal:meal @optionals"
+      - "@optionals for $meal:meal @optionals I @optionals ate $pv.TwoDigitInteger:carbs carbs @optionals"
+      - "@optionals for $meal:meal @optionals I @optionals had $pv.TwoDigitInteger:carbs carbs @optionals"
+      - "@optionals I ate $food:food $pv.TwoDigitInteger:carbs carbs @optionals"
+      - "@optionals I had $food:food $pv.TwoDigitInteger:carbs carbs @optionals"
+      
+      # Meal logging with just carbs
+      - "@optionals I @optionals ate $pv.TwoDigitInteger:carbs @optionals grams of @optionals carbs @optionals"
+      - "@optionals I @optionals had $pv.TwoDigitInteger:carbs @optionals grams of @optionals carbs @optionals"
+      - "@optionals I @optionals consumed $pv.TwoDigitInteger:carbs @optionals grams of @optionals carbs @optionals"
+      - "@optionals log @optionals $pv.TwoDigitInteger:carbs carbs @optionals"
+      - "@optionals record @optionals $pv.TwoDigitInteger:carbs carbs @optionals"
+      - "@optionals add @optionals $pv.TwoDigitInteger:carbs carbs @optionals"
+      - "@optionals log $pv.TwoDigitInteger:carbs carbs for $meal:meal @optionals"
+      - "@optionals add $pv.TwoDigitInteger:carbs carbs to $meal:meal @optionals"
+      
+      # Three-digit carb support
+      
+      # Simple meal commands
+      - "log a meal"
+      - "record a meal"
+      - "add a meal"
+      - "log my $meal:meal"
+      - "record my $meal:meal"
+      - "track my $meal:meal"
+      - "log $food:food"
+      - "add $food:food"
+      - "I ate $food:food"
+      - "I had $food:food"
+
+    log_insulin:
+      # Direct number + units commands (most common pattern)
+      - "log $pv.TwoDigitInteger:units units of insulin"
+      - "log $pv.TwoDigitInteger:units units"
+      - "log $number:number units of insulin"
+      - "log $number:number units"
+      - "record $pv.TwoDigitInteger:units units of insulin"
+      - "record $pv.TwoDigitInteger:units units"
+      - "add $pv.TwoDigitInteger:units units of insulin"
+      - "add $pv.TwoDigitInteger:units units"
+      
+      # Basic insulin logging with units
+      - "@optionals I @optionals took $pv.TwoDigitInteger:units units @optionals of @optionals $insulin_type:insulin_type @optionals"
+      - "@optionals I @optionals injected $pv.TwoDigitInteger:units units @optionals of @optionals $insulin_type:insulin_type @optionals"
+      - "@optionals I @optionals gave @optionals myself @optionals $pv.TwoDigitInteger:units units @optionals of @optionals $insulin_type:insulin_type @optionals"
+      - "@optionals I @optionals bolused $pv.TwoDigitInteger:units units @optionals of @optionals $insulin_type:insulin_type @optionals"
+      
+      # Insulin logging without type
+      - "@optionals I @optionals took $pv.TwoDigitInteger:units units @optionals of insulin @optionals"
+      - "@optionals I @optionals injected $pv.TwoDigitInteger:units units @optionals of insulin @optionals"
+      - "@optionals I @optionals gave @optionals myself @optionals $pv.TwoDigitInteger:units units @optionals of insulin @optionals"
+      - "@optionals I @optionals bolused $pv.TwoDigitInteger:units units @optionals"
+      
+      # Simple insulin commands with optionals
+      - "@optionals log @optionals $pv.TwoDigitInteger:units units @optionals of insulin @optionals"
+      - "@optionals record @optionals $pv.TwoDigitInteger:units units @optionals of insulin @optionals"
+      - "@optionals add @optionals $pv.TwoDigitInteger:units units @optionals of insulin @optionals"
+      - "@optionals log insulin @optionals $pv.TwoDigitInteger:units @optionals units @optionals"
+      - "@optionals record insulin @optionals $pv.TwoDigitInteger:units @optionals units @optionals"
+      
+      # Natural number expressions
+      - "@optionals I @optionals took $number:number units @optionals of @optionals $insulin_type:insulin_type @optionals"
+      - "@optionals I @optionals injected $number:number units @optionals of @optionals $insulin_type:insulin_type @optionals"
+      - "@optionals I @optionals gave @optionals myself @optionals $number:number units @optionals of @optionals $insulin_type:insulin_type @optionals"
+      - "@optionals bolus $number:number units @optionals"
+      - "@optionals inject $number:number units @optionals"
+      - "give $number:number units"
+      - "take $number:number units"
+      
+      # Three-digit number support
+      
+      # Simple commands
+      - "log insulin"
+      - "record insulin"
+      - "add insulin"
+      - "track insulin"
+
+    show_log:
+      # Show entries by type and time
+      - "show @optionals my @optionals $log_type:log_type @optionals from @optionals $date_ref:date_ref"
+      - "what @optionals did I eat @optionals for $meal:meal @optionals $date_ref:date_ref @optionals"
+      - "show @optionals me @optionals $date_ref:date_ref $meal:meal"
+      - "what was my $log_type:log_type $date_ref:date_ref"
+      - "show $date_ref:date_ref entries"
+      - "display @optionals my @optionals log"
+      - "open @optionals my @optionals logbook"
+      - "show log"
+      - "view entries"
+
+    delete_entry:
+      # Delete insulin timers
+      - "delete @optionals the @optionals $ordinal:ordinal @optionals insulin @optionals timer"
+      - "remove @optionals the @optionals $ordinal:ordinal @optionals insulin @optionals timer"
+      - "cancel @optionals the @optionals $ordinal:ordinal @optionals insulin @optionals timer"
+      - "stop @optionals the @optionals $ordinal:ordinal @optionals insulin @optionals timer"
+      - "kill @optionals the @optionals $ordinal:ordinal @optionals insulin @optionals timer"
+      
+      # Delete all timers
+      - "delete @optionals all @optionals insulin timers"
+      - "remove @optionals all @optionals insulin timers"
+      - "cancel @optionals all @optionals insulin timers"
+      - "stop @optionals all @optionals insulin timers"
+      - "clear @optionals all @optionals timers"
+      
+      # Delete entries
+      - "delete @optionals the @optionals last @optionals $log_type:log_type @optionals entry"
+      - "remove @optionals the @optionals last @optionals $log_type:log_type @optionals entry"
+      - "delete @optionals my @optionals last @optionals $meal:meal"
+      - "remove @optionals my @optionals last @optionals $meal:meal"
+      - "delete last entry"
+      - "remove last entry"
+
+    update_entry:
+      # Update meal carbs
+      - "update @optionals my @optionals $meal:meal to $pv.TwoDigitInteger:carbs carbs"
+      - "change @optionals my @optionals $meal:meal to $pv.TwoDigitInteger:carbs carbs"
+      - "correct @optionals my @optionals $meal:meal to $pv.TwoDigitInteger:carbs carbs"
+      - "fix @optionals my @optionals $meal:meal to $pv.TwoDigitInteger:carbs carbs"
+      
+      # Update insulin units
+      - "update @optionals my @optionals last insulin to $pv.TwoDigitInteger:units units"
+      - "change @optionals my @optionals last insulin to $pv.TwoDigitInteger:units units"
+      - "correct @optionals my @optionals last insulin to $pv.TwoDigitInteger:units units"
+      - "fix @optionals my @optionals last insulin to $pv.TwoDigitInteger:units units"
+      
+      # Update with natural numbers
+      - "update @optionals my @optionals $meal:meal to $number:number carbs"
+      - "change @optionals my @optionals last insulin to $number:number units"
+
+  slots:
+    meal:
+      - breakfast
+      - lunch
+      - dinner
+      - supper
+      - snack
+      - brunch
+      - morning snack
+      - afternoon snack
+      - evening snack
+      - late snack
+      
+    insulin_type:
+      - rapid
+      - fast acting
+      - long acting
+      - basal
+      - bolus
+      
+    food:
+      # Fruits
+      - apple
+      - apples
+      - banana
+      - bananas
+      - orange
+      - oranges
+      - pear
+      - pears
+      - mango
+      - mangoes
+      - pineapple
+      - strawberry
+      - strawberries
+      - blueberry
+      - blueberries
+      - raspberry
+      - raspberries
+      - blackberry
+      - blackberries
+      - watermelon
+      - grape
+      - grapes
+      - cantaloupe
+      - honeydew
+      - honeydew melon
+      - kiwi
+      - lemon
+      - lime
+      - peach
+      - peaches
+      - plum
+      - plums
+      - apricot
+      - apricots
+      - avocado
+      - cherry
+      - cherries
+      - cranberry
+      - cranberries
+      - grapefruit
+      - dates
+      - fig
+      - figs
+      - pomegranate
+      - papaya
+      - guava
+      - passion fruit
+      - dragon fruit
+      - starfruit
+      - coconut
+      - melon
+      - berries
+      - fruit salad
+      
+      # Vegetables
+      - carrot
+      - carrots
+      - broccoli
+      - cauliflower
+      - spinach
+      - lettuce
+      - tomato
+      - tomatoes
+      - cucumber
+      - pepper
+      - peppers
+      - bell pepper
+      - onion
+      - onions
+      - garlic
+      - potato
+      - potatoes
+      - sweet potato
+      - sweet potatoes
+      - corn
+      - peas
+      - green beans
+      - beans
+      - asparagus
+      - celery
+      - mushroom
+      - mushrooms
+      - zucchini
+      - squash
+      - pumpkin
+      - cabbage
+      - brussels sprouts
+      - kale
+      - eggplant
+      - beet
+      - beets
+      - radish
+      - turnip
+      - artichoke
+      - okra
+      
+      # Grains and Starches
+      - bread
+      - toast
+      - bagel
+      - english muffin
+      - muffin
+      - roll
+      - bun
+      - pita
+      - tortilla
+      - wrap
+      - rice
+      - brown rice
+      - white rice
+      - fried rice
+      - pasta
+      - spaghetti
+      - macaroni
+      - noodles
+      - ramen
+      - ravioli
+      - quinoa
+      - couscous
+      - barley
+      - oats
+      - oatmeal
+      - cereal
+      - granola
+      - crackers
+      - chips
+      - popcorn
+      - pretzels
+      - french fries
+      - fries
+      - hash browns
+      - pancake
+      - pancakes
+      - waffle
+      - waffles
+      - french toast
+      
+      # Proteins
+      - chicken
+      - beef
+      - pork
+      - lamb
+      - turkey
+      - ham
+      - bacon
+      - sausage
+      - hot dog
+      - meatball
+      - meatballs
+      - steak
+      - ribs
+      - roast
+      - fish
+      - salmon
+      - tuna
+      - shrimp
+      - crab
+      - lobster
+      - scallops
+      - oysters
+      - clams
+      - mussels
+      - calamari
+      - eggs
+      - egg
+      - scrambled eggs
+      - fried egg
+      - boiled egg
+      - omelet
+      - tofu
+      - tempeh
+      - lentils
+      - chickpeas
+      - hummus
+      - nuts
+      - almonds
+      - walnuts
+      - cashews
+      - peanuts
+      - peanut butter
+      - almond butter
+      
+      # Dairy
+      - milk
+      - cheese
+      - cheddar
+      - mozzarella
+      - swiss
+      - parmesan
+      - cream cheese
+      - cottage cheese
+      - yogurt
+      - greek yogurt
+      - ice cream
+      - frozen yogurt
+      - butter
+      - cream
+      - sour cream
+      - whipped cream
+      
+      # Prepared Foods
+      - sandwich
+      - burger
+      - hamburger
+      - cheeseburger
+      - pizza
+      - taco
+      - tacos
+      - burrito
+      - quesadilla
+      - enchilada
+      - nachos
+      - salad
+      - caesar salad
+      - greek salad
+      - cobb salad
+      - soup
+      - chili
+      - stew
+      - curry
+      - stir fry
+      - casserole
+      - sushi
+      - spring roll
+      - egg roll
+      - dumpling
+      - dumplings
+      - pot sticker
+      - samosa
+      - empanada
+      - calzone
+      - stromboli
+      - kebab
+      - gyro
+      - falafel
+      - shawarma
+      
+      # Snacks and Sweets
+      - cookie
+      - cookies
+      - cake
+      - pie
+      - brownie
+      - brownies
+      - donut
+      - donuts
+      - candy
+      - chocolate
+      - candy bar
+      - lollipop
+      - gummy bears
+      - jelly beans
+      - licorice
+      - marshmallow
+      - marshmallows
+      - pudding
+      - jello
+      - custard
+      - mousse
+      - tiramisu
+      - cheesecake
+      - cupcake
+      - scone
+      - biscuit
+      - croissant
+      - danish
+      - cinnamon roll
+      - protein bar
+      - granola bar
+      - energy bar
+      - trail mix
+      - jerky
+      
+      # Beverages
+      - water
+      - juice
+      - orange juice
+      - apple juice
+      - grape juice
+      - cranberry juice
+      - soda
+      - cola
+      - sprite
+      - root beer
+      - ginger ale
+      - lemonade
+      - iced tea
+      - tea
+      - coffee
+      - latte
+      - cappuccino
+      - espresso
+      - hot chocolate
+      - smoothie
+      - shake
+      - milkshake
+      - protein shake
+      - beer
+      - wine
+      - cocktail
+      
+      # Asian Foods
+      - sashimi
+      - tempura
+      - teriyaki
+      - udon
+      - soba
+      - pho
+      - pad thai
+      - lo mein
+      - chow mein
+      - dim sum
+      - spring rolls
+      - egg rolls
+      - wontons
+      - bao
+      - tikka masala
+      - naan
+      - biryani
+      - tandoori
+      
+      # Italian Foods
+      - fettuccine
+      - linguine
+      - penne
+      - rigatoni
+      - lasagna
+      - tortellini
+      - gnocchi
+      - risotto
+      - bruschetta
+      - caprese
+      - minestrone
+      
+      # Mexican Foods
+      - tamale
+      - fajita
+      - guacamole
+      - salsa
+      - refried beans
+      - mexican rice
+      - churros
+      - flan
+      
+      # Fast Food Items
+      - big mac
+      - whopper
+      - chicken nuggets
+      - chicken tenders
+      - fish sandwich
+      - chicken sandwich
+      - onion rings
+      - mozzarella sticks
+      - chicken wings
+      - buffalo wings
+      - slider
+      - sub
+      - hoagie
+      - hero
+      
+      # Breakfast Foods
+      - porridge
+      - eggs benedict
+      - breakfast sandwich
+      - breakfast burrito
+      - jam
+      - jelly
+      - honey
+      - syrup
+      - home fries
+      - grits
+      - biscuits and gravy
+      
+    log_type:
+      - meal
+      - insulin
+      - glucose
+      - sugar
+      - carbs
+      - dose
+      - entry
+      - reading
+      - injection
+      - food
+      
+    date_ref:
+      - today
+      - yesterday
+      - this morning
+      - this afternoon
+      - this evening
+      - tonight
+      - last night
+      - monday
+      - tuesday
+      - wednesday
+      - thursday
+      - friday
+      - saturday
+      - sunday
+      - this week
+      - last week
+      
+    ordinal:
+      - first
+      - second
+      - third
+      - fourth
+      - fifth
+      - last
+      - latest
+      - recent
+      
+    number:
+      - one
+      - two
+      - three
+      - four
+      - five
+      - six
+      - seven
+      - eight
+      - nine
+      - ten
+      - eleven
+      - twelve
+      - thirteen
+      - fourteen
+      - fifteen
+      - sixteen
+      - seventeen
+      - eighteen
+      - nineteen
+      - twenty
+      - twenty one
+      - twenty two
+      - twenty three
+      - twenty four
+      - twenty five
+      - twenty six
+      - twenty seven
+      - twenty eight
+      - twenty nine
+      - thirty
+      - thirty one
+      - thirty two
+      - thirty three
+      - thirty four
+      - thirty five
+      - thirty six
+      - thirty seven
+      - thirty eight
+      - thirty nine
+      - forty
+      - forty one
+      - forty two
+      - forty three
+      - forty four
+      - forty five
+      - forty six
+      - forty seven
+      - forty eight
+      - forty nine
+      - fifty
+      - fifty one
+      - fifty two
+      - fifty three
+      - fifty four
+      - fifty five
+      - fifty six
+      - fifty seven
+      - fifty eight
+      - fifty nine
+      - sixty
+      - sixty one
+      - sixty two
+      - sixty three
+      - sixty four
+      - sixty five
+      - seventy
+      - seventy five
+      - eighty
+      - eighty five
+      - ninety
+      - ninety five
+      - one hundred
+      - one fifty
+      - two hundred
+
+  macros:
+    optionals:
+      - please
+      - can you
+      - could you
+      - would you
+      - just
+      - now
+      - currently
+      - already
+      - recently
+      - earlier
+      - about
+      - around
+      - roughly
+      - approximately
+      - maybe
+      - probably
+      - think
+      - guess
+      - really
+      - actually
+      - definitely
+      - totally
+      - completely
+      - um
+      - uh
+      - well
+      - so
+      - like
+      - you know
+      - quickly
+      - slowly
+      - carefully
+      - properly
+      - correctly
+      - done
+      - finished
+      - completed
+      - ready
+      - going to
+      - want to
+      - need to
+      - have to
+      - should
+      - must

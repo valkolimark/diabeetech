@@ -1,0 +1,35 @@
+[Unit]
+Description=Diabeetech Kiosk Display
+After=diabeetech-server.service graphical.target
+Requires=diabeetech-server.service
+
+[Service]
+Type=simple
+User=markt
+Environment="DISPLAY=:0"
+Environment="XAUTHORITY=/home/markt/.Xauthority"
+ExecStartPre=/usr/bin/xset -display :0 s off -dpms
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/bin/chromium-browser \
+  --kiosk \
+  --noerrdialogs \
+  --disable-infobars \
+  --disable-session-crashed-bubble \
+  --disable-translate \
+  --no-first-run \
+  --start-fullscreen \
+  --window-size=1024,600 \
+  --autoplay-policy=no-user-gesture-required \
+  --use-fake-ui-for-media-stream \
+  --enable-features=WebRTCPipeWireCapturer \
+  --disable-features=TranslateUI \
+  --check-for-update-interval=31536000 \
+  --overscroll-history-navigation=0 \
+  --disable-pinch \
+  --password-store=basic \
+  http://localhost:8080
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=graphical.target
